@@ -1,12 +1,12 @@
 # WebScraper
 Proyecto Web Scraping
 
-#Autores:
+# Autores:
 
 - Miguel Ángel Pérez
 - José Ramón Martínez
 
-#Contexto
+# Contexto
 
-#Objetivo
+# Objetivo
 Se desarrollará un bot o agente en Python para la definición y creación de un dataset, los datos que recogeremos vienen de la Web.
