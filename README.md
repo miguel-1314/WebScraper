@@ -4,7 +4,7 @@ Proyecto Web Scraping
 # Autores:
 
 - Miguel Ángel Pérez
-- José Ramón Martínez
+- José Ramón Martínez-Carbonell
 
 # Contexto
 
