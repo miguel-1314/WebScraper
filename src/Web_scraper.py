@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import time
 import csv
+import re
+import unidecode
 
 link = 'https://www.worldpadeltour.com/jugadores/?ranking=todos'
 headers = {
@@ -17,6 +19,29 @@ headers = {
 37.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"
 }
 
+def remove_accents(raw_text):
+    raw_text = re.sub(u"[àáâãäå]", 'a', raw_text)
+    raw_text = re.sub(u"[èéêë]", 'e', raw_text)
+    raw_text = re.sub(u"[ìíîï]", 'i', raw_text)
+    raw_text = re.sub(u"[òóôõö]", 'o', raw_text)
+    raw_text = re.sub(u"[ùúûü]", 'u', raw_text)
+    raw_text = re.sub(u"[ýÿ]", 'y', raw_text)
+    raw_text = re.sub(u"[ß]", 'ss', raw_text)
+    raw_text = re.sub(u"[ñ]", 'n', raw_text)
+    return raw_text
+
+def camel_case_split(name):
+	splitted = re.sub('([A-Z][a-z]+)', r' \1',re.sub('([A-Z]+)', r' \1', name)).split()
+	return splitted
+
+def compose_url(array_name):
+	new_url = '-'.join(array_name)
+	print(remove_accents(new_url))
+
+def build_url(name):
+	compose_url(camel_case_split(name))
+	
+
 try:
 	web = requests.get(link, headers=headers)
 except requests.exceptions.RequestException:
@@ -26,8 +51,11 @@ if web.status_code == 200:
 	content = BeautifulSoup(web.content, "lxml")
 
 	for player in content.find_all('li', class_='c-player-card__item'):
+		name = player.find('div', class_='c-player-card__name').string
+		score = player.find('div', class_='c-player-card__score').string
 		print("Jugador / puntuacion \n")
-		print(player.find('div', class_='c-player-card__name').string+'\n'+player.find('div', class_='c-player-card__score').string)
+		print(name + '\n' + score)
 		print(" ··········· \n")
+		build_url(name)
 else:
 	print("Web is not available")
