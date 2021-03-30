@@ -1,9 +1,8 @@
 # WebScraper 
 
-# Introducción
 Proyecto de Web Scraping para la asignatura de Tipología y Ciclo de Vida de Datos del Master en Ciencia de Datos de la UOC. El fin de este proyecto es meramente académico. Se propone una solución a la problemática de la extracción de datos de una página web. En concreto, se consultará la página oficial de World Padel Tour en la que aparecen diversos datos sobre los jugadores y jugadoras del circuito.
 
-# Autores:
+# Autores
 - Miguel Ángel Pérez
 - José Ramón Martínez-Carbonell
 
