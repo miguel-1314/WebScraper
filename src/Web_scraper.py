@@ -32,7 +32,8 @@ def remove_accents(raw_text):
 
 def camel_case_split(name):
 	splitted = re.sub('([A-Z][a-z]+)', r' \1',re.sub('([A-Z]+)', r' \1', name)).split()
-	return splitted
+	converted_list = [x.lower() for x in splitted]
+	return converted_list
 
 def compose_url(array_name):
 	new_url = '-'.join(array_name)
@@ -40,10 +41,9 @@ def compose_url(array_name):
 
 def build_url(name):
 	compose_url(camel_case_split(name))
-	
 
 try:
-	web = requests.get(link, headers=headers)
+	web = requests.get(link)
 except requests.exceptions.RequestException:
 	pass
 
