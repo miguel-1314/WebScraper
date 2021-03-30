@@ -37,10 +37,11 @@ def camel_case_split(name):
 
 def compose_url(array_name):
 	new_url = '-'.join(array_name)
-	print(remove_accents(new_url))
+	return remove_accents(new_url)
 
 def build_url(name):
-	compose_url(camel_case_split(name))
+	compound_url = link + compose_url(camel_case_split(name))
+	return compound_url
 
 try:
 	web = requests.get(link, headers=headers)
@@ -56,6 +57,6 @@ if web.status_code == 200:
 		print("Jugador / puntuacion \n")
 		print(name + '\n' + score)
 		print(" ··········· \n")
-		build_url(name)
+		print(build_url(name))
 else:
 	print("Web is not available")
