@@ -43,7 +43,7 @@ def build_url(name):
 	compose_url(camel_case_split(name))
 
 try:
-	web = requests.get(link)
+	web = requests.get(link, headers=headers)
 except requests.exceptions.RequestException:
 	pass
 
