@@ -5,7 +5,7 @@ import csv
 import re
 import unidecode
 
-link = 'https://www.worldpadeltour.com/jugadores/?ranking=todos'
+link = 'https://www.worldpadeltour.com/jugadores/'
 headers = {
 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,\
 */*;q=0.8",
