@@ -1,11 +1,15 @@
 import requests
 from bs4 import BeautifulSoup
+from selenium import webdriver
 import time
 import csv
 import re
 import unidecode
 
-link = 'https://www.worldpadeltour.com/jugadores/'
+
+driver = webdriver.Firefox(executable_path = '..\geckodriver.exe')
+link_players = 'https://www.worldpadeltour.com/jugadores/'
+index = 'https://www.worldpadeltour.com'
 headers = {
 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,\
 */*;q=0.8",
@@ -40,23 +44,31 @@ def compose_url(array_name):
 	return remove_accents(new_url)
 
 def build_url(name):
-	compound_url = link + compose_url(camel_case_split(name))
+	compound_url = link_players + compose_url(camel_case_split(name))
 	return compound_url
 
-try:
-	web = requests.get(link, headers=headers)
-except requests.exceptions.RequestException:
-	pass
 
-if web.status_code == 200:
-	content = BeautifulSoup(web.content, "lxml")
+def scroll_down(driver, link):
+	driver.get(link)
+	driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+	print("Cargando datos.")
+	time.sleep(3)
+
+	web = driver.page_source
+	content = BeautifulSoup(web, "lxml")
+	count = 1 #Player counter
 
 	for player in content.find_all('li', class_='c-player-card__item'):
-		name = player.find('div', class_='c-player-card__name').string
-		score = player.find('div', class_='c-player-card__score').string
+		name = player.find('div', class_='c-player-card__name').text
+		score = player.find('div', class_='c-player-card__score').text
 		print("Jugador / puntuacion \n")
 		print(name + '\n' + score)
 		print(" ··········· \n")
 		print(build_url(name))
-else:
-	print("Web is not available")
+		count += 1
+
+	print("Contador de jugadores ", count)
+	driver.close()
+
+#main
+scroll_down(driver, link_players)
