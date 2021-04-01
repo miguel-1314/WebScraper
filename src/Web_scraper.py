@@ -6,6 +6,7 @@ import csv
 import re
 import unidecode
 
+#driver = webdriver.Firefox(executable_path='/Users/JRamon/Downloads/geckodriver')
 
 driver = webdriver.Firefox(executable_path = '..\geckodriver.exe')
 link_players = 'https://www.worldpadeltour.com/jugadores/'
@@ -22,6 +23,11 @@ headers = {
 "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/5\
 37.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36"
 }
+
+player_attributes_one = ["ranking", "puntos", "partidos_jugados","partidos_ganados","partidos_perdidos","efectividad","racha_victorias"]
+player_attributes_two = ["compañero", "posicion", "lugar nacimiento", "fecha nacimiento", "altura", "residencia"]
+statistics_attributes = ["partidos jugados", "partidos ganados", "efectividad", "campeon", "finalista", "semifinalista", "cuartos", "octavos", "dieciseisavos"]
+years = ["2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"]
 
 def remove_accents(raw_text):
     raw_text = re.sub(u"[àáâãäå]", 'a', raw_text)
@@ -44,9 +50,41 @@ def compose_url(array_name):
 	return remove_accents(new_url)
 
 def build_url(name):
-	compound_url = link_players + compose_url(camel_case_split(name))
+	compound_url = link_players + compose_url(camel_case_split(name)) + '/'
 	return compound_url
 
+def get_attributes(url_player):
+    web_player = requests.get(url_player)
+    if(web_player.status_code == 200) :
+        content_player = BeautifulSoup(web_player.content, "lxml")
+        i = 0
+        for data in content_player.find_all('div', class_='c-ranking-header__data-box'):
+            new_data = data.find('p', class_='c-ranking-header__data').text
+            print(player_attributes_one[i] + " : "  + new_data)
+            i+=1
+        j = 0
+        for more_data in content_player.find_all('li', class_='c-player__data-item'):
+            item = more_data.find('p').text
+            print(player_attributes_two[j] + " : "  + item)
+            j+=1
+        statistics_attributes_index = 0
+        year_index = 0
+        count_statistics = 0
+        for statistics in content_player.find_all('span', class_='c-flex-table__item-data'):
+            if(count_statistics == 9):
+                year_index += 1
+                statistics_attributes_index = 0
+                count_statistics = 0
+
+            print(years[year_index] + " " + statistics_attributes[statistics_attributes_index] + " : " + statistics.text)
+            statistics_attributes_index+=1
+            count_statistics+=1
+            
+  
+def process_player(name):
+	url_player = build_url(name)
+	print("Procesando: ", url_player)
+	get_attributes(url_player)
 
 def scroll_down(driver, link):
 	driver.get(link)
@@ -64,7 +102,8 @@ def scroll_down(driver, link):
 		print("Jugador / puntuacion \n")
 		print(name + '\n' + score)
 		print(" ··········· \n")
-		print(build_url(name))
+		process_player(name)
+		time.sleep(1)
 		count += 1
 
 	print("Contador de jugadores ", count)
