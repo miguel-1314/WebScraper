@@ -113,7 +113,8 @@ def process_player(name):
 	print("Procesando: ", url_player)
 	player = get_attributes(url_player)
 	print(player)
-	persist(player)
+	if player != []:
+		persist(player)
 
 #Procedimiento principal que llama a todas las funciones definidas.
 # Realiza un scroll down con Selenium en la página de resumen 
@@ -129,7 +130,7 @@ def scroll_down(driver, link):
 	count = 1 #Player counter
 
 	for player in content.find_all('li', class_='c-player-card__item'):
-		#if count == 3:
+		#if count == 10:
 			#break
 
 		name = player.find('div', class_='c-player-card__name').text
