@@ -114,9 +114,11 @@ def persist(player):
 # Llama a las funciones que construyen la url.
 # A la que obtiene los atributos que queremos almacenar en el fichero csv.
 # A la que almacena la fila del jugador en el csv.
-def process_player(name):
-	url_player = build_url(name)
-	print("Procesando: ", url_player)
+
+
+def process_player(url_player):
+	#url_player = build_url(name)
+	#print("Procesando: ", url_player)
 	player = get_attributes(url_player)
 	print(player)
 	if player != []:
@@ -140,11 +142,11 @@ def scroll_down(driver, link):
 			#break
 
 		name = player.find('div', class_='c-player-card__name').text
-		score = player.find('div', class_='c-player-card__score').text
-		print("Jugador / puntuacion \n")
-		print(name + '\n' + score)
-		print(" ··········· \n")
-		process_player(name)
+		url = player.find('a', class_='c-trigger')
+		#print("Jugador / puntuacion \n")
+		#print(name + '\n' + score)
+		#print(" ··········· \n")
+		process_player(url['href'])
 		time.sleep(10)
 		count += 1
 
