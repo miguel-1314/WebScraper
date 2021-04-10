@@ -72,15 +72,37 @@ def build_url(name):
 	return compound_url
 
 #--------------------------------------------------------------------------------------------------
+#--------------------------------------Extracción de imágenes--------------------------------------
+def load_requests(source_url):
+    r = requests.get(source_url, stream=True)
+    if r.status_code == 200:
+        aSplit = source_url.split('/')
+        ruta = "/Users/JRamon/imgs_wpt/" + aSplit[len(aSplit)-1]
+        output = open(ruta,"wb")
+        output.write(r.content)
+        output.close()
+        
+def get_img(content_player):
+    img_url_div = content_player.find_all('div', class_='u-img-cropped')
+    img_url = img_url_div[1].get('style')
+    formatted_img_url = img_url.replace('background-image: url(','').replace(');','')
+    load_requests(formatted_img_url)   
 
+#--------------------------------------------------------------------------------------------------
+
+#Método que itera sobre la página de cada jugador para extraer sus atributos.
+# Tiene 3 bucles en base a la estructura de la página, para iterar sobre los distintos
+# componentes que interesan
 def get_attributes(url_player):
     web_player = requests.get(url_player)
     player_list_one = []
     player_list_two = []
     if(web_player.status_code == 200) :
         content_player = BeautifulSoup(web_player.content, "lxml")
+        getImg(content_player)
         #Nombre del jugador
         player_list_one.append(content_player.find('h1', class_='c-ranking-header__title').text)
+        print(url_player)
         i = 1
         for data in content_player.find_all('div', class_='c-ranking-header__data-box'):
             new_data = data.find('p', class_='c-ranking-header__data').text
@@ -102,11 +124,11 @@ def get_attributes(url_player):
                 statistics_attributes_index = 0
                 count_statistics = 0
 
-            print(years[year_index] + " " + statistics_attributes[statistics_attributes_index] + " : " + statistics.text)
+            #print(years[year_index] + " " + statistics_attributes[statistics_attributes_index] + " : " + statistics.text)
             statistics_attributes_index+=1
             count_statistics+=1
     else:
-    	print('it doesnt connect')
+    	print('Error processing webpage : ', url_player)
     return player_list_one + player_list_two
 
 #Procdimiento que persiste a un jugador en un fichero CSV
@@ -120,8 +142,8 @@ def persist(player):
 # A la que obtiene los atributos que queremos almacenar en el fichero csv.
 # A la que almacena la fila del jugador en el csv.
 def process_player(url_player):
-	#url_player = build_url(name)
-	#print("Procesando: ", url_player)
+	url_player = build_url(name)
+	print("Procesando: ", url_player)
 	player = get_attributes(url_player)
 	print(player)
 	if player != []:
@@ -141,15 +163,14 @@ def scroll_down(driver, link):
 	count = 1 #Player counter
 
 	for player in content.find_all('li', class_='c-player-card__item'):
-		#if count == 10:
-			#break
-		
+		if count == 3:
+			break
 		name = player.find('div', class_='c-player-card__name').text
 		url = player.find('a', class_='c-trigger')
 		process_player(url['href'])
-		time.sleep(10)
+		time.sleep(2)
 		count += 1
-
+  
 	print("Contador de jugadores ", count)
 	driver.close()
 
