@@ -36,6 +36,9 @@ player_attributes_two = ["compañero", "posicion", "lugar nacimiento", "fecha na
 statistics_attributes = ["partidos jugados", "partidos ganados", "efectividad", "campeon", "finalista", "semifinalista", "cuartos", "octavos", "dieciseisavos"]
 years = ["2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"]
 
+
+#------------------------------------ Funciones de formateo URL ---------------------------------
+
 #Función que elimina los acentos de un cadena de caracteres, así como de convertir algunas 
 #cadenas en otras que nos interesen
 def remove_accents(raw_text):
@@ -67,6 +70,8 @@ def compose_url(array_name):
 def build_url(name):
 	compound_url = link_players + compose_url(camel_case_split(name)) + '/'
 	return compound_url
+
+#--------------------------------------------------------------------------------------------------
 
 def get_attributes(url_player):
     web_player = requests.get(url_player)
@@ -114,8 +119,6 @@ def persist(player):
 # Llama a las funciones que construyen la url.
 # A la que obtiene los atributos que queremos almacenar en el fichero csv.
 # A la que almacena la fila del jugador en el csv.
-
-
 def process_player(url_player):
 	#url_player = build_url(name)
 	#print("Procesando: ", url_player)
@@ -131,7 +134,7 @@ def scroll_down(driver, link):
 	driver.get(link)
 	driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 	print("Cargando datos.")
-	time.sleep(3)
+	time.sleep(10)
 
 	web = driver.page_source
 	content = BeautifulSoup(web, "lxml")
@@ -153,6 +156,6 @@ def scroll_down(driver, link):
 	print("Contador de jugadores ", count)
 	driver.close()
 
-#-------------------------------------------- main
+################################   main   ###########################
 persist(player_attributes_one + player_attributes_two) #añadimos cabecera al csv
 scroll_down(driver, link_players)
