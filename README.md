@@ -6,9 +6,6 @@ Proyecto de Web Scraping para la asignatura de Tipología y Ciclo de Vida de Dat
 - Miguel Ángel Pérez
 - José Ramón Martínez-Carbonell
 
-# Contexto  (Si te parece esta sección la quitamos)
-
-
 # Objetivo
 Se desarrollará un bot o agente en Python para la definición y creación de un dataset, los datos que recogeremos vienen de la Web mencionada en la introducción. Se pretende extraer tanto atributos simples (nombre, edad) como atributos más complejos en forma de elementos multimedia.
 
@@ -18,11 +15,12 @@ Para utilizar este código será necesario tener previamente instalado en su PC 
 ### MacOS / Linux
 
 ```
-python3 archivo.py
+python3 Web_scraper.py
 ```
 
 ### Windows
 ```
+python Web_scraper.py
 ```
 
 # Miscelanea
