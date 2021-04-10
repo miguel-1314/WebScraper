@@ -143,12 +143,9 @@ def scroll_down(driver, link):
 	for player in content.find_all('li', class_='c-player-card__item'):
 		#if count == 10:
 			#break
-
+		
 		name = player.find('div', class_='c-player-card__name').text
 		url = player.find('a', class_='c-trigger')
-		#print("Jugador / puntuacion \n")
-		#print(name + '\n' + score)
-		#print(" ··········· \n")
 		process_player(url['href'])
 		time.sleep(10)
 		count += 1
