@@ -81,6 +81,8 @@ def load_requests(source_url):
         output = open(ruta,"wb")
         output.write(r.content)
         output.close()
+    else:
+    	print("Error processing web")
         
 def get_img(content_player):
     img_url_div = content_player.find_all('div', class_='u-img-cropped')
@@ -99,7 +101,7 @@ def get_attributes(url_player):
     player_list_two = []
     if(web_player.status_code == 200) :
         content_player = BeautifulSoup(web_player.content, "lxml")
-        getImg(content_player)
+        get_img(content_player)
         #Nombre del jugador
         player_list_one.append(content_player.find('h1', class_='c-ranking-header__title').text)
         print(url_player)
