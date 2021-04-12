@@ -124,10 +124,10 @@ def get_attributes(url_player):
         for statistics in content_player.find_all('span', class_='c-flex-table__item-data'):
             if(count_statistics == 9):
                 year_index += 1
-            if(year_index == 2):
-                break
                 statistics_attributes_index = 0
                 count_statistics = 0
+            if( year_index == 2):
+                break
 
             #print(years[year_index] + " " + statistics_attributes[statistics_attributes_index] + " : " + statistics.text)
             statistics_attributes_index+=1
