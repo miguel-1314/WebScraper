@@ -128,8 +128,9 @@ def get_attributes(url_player):
                 count_statistics = 0
             if( year_index == 2):
                 break
+            
 
-            #print(years[year_index] + " " + statistics_attributes[statistics_attributes_index] + " : " + statistics.text)
+            print(years[year_index] + " " + statistics_attributes[statistics_attributes_index] + " : " + statistics.text)
             statistics_attributes_index+=1
             count_statistics+=1
     else:
@@ -147,7 +148,7 @@ def persist(player):
 # A la que obtiene los atributos que queremos almacenar en el fichero csv.
 # A la que almacena la fila del jugador en el csv.
 def process_player(url_player):
-	url_player = build_url(name)
+	#url_player = build_url(url_player)
 	print("Procesando: ", url_player)
 	player = get_attributes(url_player)
 	print(player)
