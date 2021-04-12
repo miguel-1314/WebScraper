@@ -34,7 +34,7 @@ headers = {
 player_attributes_one = ["name","ranking", "puntos", "partidos_jugados","partidos_ganados","partidos_perdidos","efectividad","racha_victorias"]
 player_attributes_two = ["compañero", "posicion", "lugar nacimiento", "fecha nacimiento", "altura", "residencia"]
 statistics_attributes = ["partidos jugados", "partidos ganados", "efectividad", "campeon", "finalista", "semifinalista", "cuartos", "octavos", "dieciseisavos"]
-years = ["2021", "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013"]
+years = ["2021", "2020"]
 
 
 #------------------------------------ Funciones de formateo URL ---------------------------------
@@ -99,6 +99,7 @@ def get_attributes(url_player):
     web_player = requests.get(url_player)
     player_list_one = []
     player_list_two = []
+    player_list_statistics = []
     if(web_player.status_code == 200) :
         content_player = BeautifulSoup(web_player.content, "lxml")
         get_img(content_player)
@@ -123,6 +124,8 @@ def get_attributes(url_player):
         for statistics in content_player.find_all('span', class_='c-flex-table__item-data'):
             if(count_statistics == 9):
                 year_index += 1
+            if(year_index == 2):
+                break
                 statistics_attributes_index = 0
                 count_statistics = 0
 
@@ -177,5 +180,5 @@ def scroll_down(driver, link):
 	driver.close()
 
 ################################   main   ###########################
-persist(player_attributes_one + player_attributes_two) #añadimos cabecera al csv
+persist(player_attributes_one + player_attributes_two)#añadimos cabecera al csv
 scroll_down(driver, link_players)
