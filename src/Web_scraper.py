@@ -16,7 +16,7 @@ driver = webdriver.Firefox(executable_path = '..\geckodriver.exe')
 link_players = 'https://www.worldpadeltour.com/jugadores/'
 index = 'https://www.worldpadeltour.com'
 
-#Definimos cabecera distinta a la por defecto
+#Definimos cabecera distinta a la por defecto para establecer nuestro user agent.
 headers = {
 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,\
 */*;q=0.8",
@@ -75,7 +75,7 @@ def build_url(name):
 #--------------------------------------------------------------------------------------------------
 #--------------------------------------Extracción de imágenes--------------------------------------
 def load_requests(source_url):
-    r = requests.get(source_url, stream=True)
+    r = requests.get(source_url, stream=True, headers = headers)
     if r.status_code == 200:
         aSplit = source_url.split('/')
         ruta = "/Users/JRamon/imgs_wpt/" + aSplit[len(aSplit)-1]
@@ -97,7 +97,7 @@ def get_img(content_player):
 # Tiene 3 bucles en base a la estructura de la página, para iterar sobre los distintos
 # componentes que interesan
 def get_attributes(url_player):
-    web_player = requests.get(url_player)
+    web_player = requests.get(url_player, headers = headers)
     player_list_one = []
     player_list_two = []
     player_list_statistics = []
