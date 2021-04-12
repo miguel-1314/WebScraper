@@ -6,12 +6,13 @@ import csv
 import re
 import unidecode
 
-#driver = webdriver.Firefox(executable_path='/Users/JRamon/Downloads/geckodriver')
+#Driver de selenium
 
-#Driver de selenium 
 driver = webdriver.Firefox(executable_path = '..\geckodriver.exe')
+
 #Pagina web de World Padel Tour en la que nos aparece un listado con todos los jugadores, tanto
 #del ranking masculino como del ranking femenino
+
 link_players = 'https://www.worldpadeltour.com/jugadores/'
 index = 'https://www.worldpadeltour.com'
 
@@ -138,7 +139,7 @@ def get_attributes(url_player):
     	print('Error processing webpage : ', url_player)
     return player_list_one + player_list_two + player_list_statistics
 
-#Procdimiento que persiste a un jugador en un fichero CSV
+#Procedimiento que persiste a un jugador en un fichero CSV
 def persist(player):
 	with open('statistics_players.csv', 'a', newline='') as csvfile:
 		storer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, dialect='excel')
@@ -163,24 +164,22 @@ def scroll_down(driver, link):
 	driver.get(link)
 	driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 	print("Cargando datos.")
-	time.sleep(10)
+	time.sleep(20)
 
 	web = driver.page_source
 	content = BeautifulSoup(web, "lxml")
 	count = 1 #Player counter
 
 	for player in content.find_all('li', class_='c-player-card__item'):
-		if count == 3:
-			break
 		name = player.find('div', class_='c-player-card__name').text
 		url = player.find('a', class_='c-trigger')
 		process_player(url['href'])
-		time.sleep(2)
+		time.sleep(10)
 		count += 1
   
 	print("Contador de jugadores ", count)
 	driver.close()
 
-################################   main   ###########################
+################################   main   ################################
 persist(player_attributes_one + player_attributes_two + statistics_attributes)#añadimos cabecera al csv
 scroll_down(driver, link_players)
