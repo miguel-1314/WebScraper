@@ -6,10 +6,10 @@ import csv
 import re
 import unidecode
 
-driver = webdriver.Firefox(executable_path='/Users/JRamon/Downloads/geckodriver')
+#driver = webdriver.Firefox(executable_path='/Users/JRamon/Downloads/geckodriver')
 
 #Driver de selenium 
-#driver = webdriver.Firefox(executable_path = '..\geckodriver.exe')
+driver = webdriver.Firefox(executable_path = '..\geckodriver.exe')
 #Pagina web de World Padel Tour en la que nos aparece un listado con todos los jugadores, tanto
 #del ranking masculino como del ranking femenino
 link_players = 'https://www.worldpadeltour.com/jugadores/'
@@ -33,7 +33,7 @@ headers = {
 #de los arrays aparece en un punto determinado de la página
 player_attributes_one = ["name","ranking", "puntos", "partidos_jugados","partidos_ganados","partidos_perdidos","efectividad","racha_victorias"]
 player_attributes_two = ["compañero", "posicion", "lugar nacimiento", "fecha nacimiento", "altura", "residencia"]
-statistics_attributes = ["partidos jugados", "partidos ganados", "efectividad", "campeon", "finalista", "semifinalista", "cuartos", "octavos", "dieciseisavos"]
+statistics_attributes = ["partidos jugados 2021", "partidos ganados 2021", "efectividad 2021", "campeon 2021", "finalista 2021", "semifinalista 2021", "cuartos 2021", "octavos 2021", "dieciseisavos 2021", "partidos jugados 2020", "partidos ganados 2020", "efectividad 2020", "campeon 2020", "finalista 2020", "semifinalista 2020", "cuartos 2020", "octavos 2020", "dieciseisavos 2020"]
 years = ["2021", "2020"]
 
 
@@ -102,7 +102,7 @@ def get_attributes(url_player):
     player_list_statistics = []
     if(web_player.status_code == 200) :
         content_player = BeautifulSoup(web_player.content, "lxml")
-        get_img(content_player)
+        #get_img(content_player) <-- Descomentar para guardar las img
         #Nombre del jugador
         player_list_one.append(content_player.find('h1', class_='c-ranking-header__title').text)
         print(url_player)
@@ -122,7 +122,7 @@ def get_attributes(url_player):
         year_index = 0
         count_statistics = 0
         for statistics in content_player.find_all('span', class_='c-flex-table__item-data'):
-            if(count_statistics == 9):
+            if(count_statistics == 9): #Si hemos llegado a las 9 estadísticas
                 year_index += 1
                 statistics_attributes_index = 0
                 count_statistics = 0
@@ -131,16 +131,17 @@ def get_attributes(url_player):
             
 
             print(years[year_index] + " " + statistics_attributes[statistics_attributes_index] + " : " + statistics.text)
+            player_list_statistics.append(statistics.text)
             statistics_attributes_index+=1
             count_statistics+=1
     else:
     	print('Error processing webpage : ', url_player)
-    return player_list_one + player_list_two
+    return player_list_one + player_list_two + player_list_statistics
 
 #Procdimiento que persiste a un jugador en un fichero CSV
 def persist(player):
 	with open('statistics_players.csv', 'a', newline='') as csvfile:
-		storer = csv.writer(csvfile, delimiter='|', quotechar='.', quoting=csv.QUOTE_MINIMAL)
+		storer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, dialect='excel')
 		storer.writerow(player)
 
 #Procedimiento que prepara todo lo necesario para el procesamiento de un jugador:
@@ -181,5 +182,5 @@ def scroll_down(driver, link):
 	driver.close()
 
 ################################   main   ###########################
-persist(player_attributes_one + player_attributes_two)#añadimos cabecera al csv
+persist(player_attributes_one + player_attributes_two + statistics_attributes)#añadimos cabecera al csv
 scroll_down(driver, link_players)
