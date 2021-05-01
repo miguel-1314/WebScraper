@@ -26,4 +26,4 @@ python Web_scraper.py
 # Miscelanea
 
 Para cualquier duda, póngase en contacto con nosotros a través de nuestros perfiles de Github. @miguel-a-ngel y @jramonmc
-
+ 
